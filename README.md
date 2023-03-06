@@ -1,72 +1,35 @@
-<!--
-title: 'AWS NodeJS Example'
-description: 'This template demonstrates how to deploy a NodeJS function running on AWS Lambda using the traditional Serverless Framework.'
-layout: Doc
-framework: v3
-platform: AWS
-language: nodeJS
-priority: 1
-authorLink: 'https://github.com/serverless'
-authorName: 'Serverless, inc.'
-authorAvatar: 'https://avatars1.githubusercontent.com/u/13742415?s=200&v=4'
--->
+# Serverless Slack Notifier Example
 
-
-# Serverless Framework AWS NodeJS Example
-
-This template demonstrates how to deploy a NodeJS function running on AWS Lambda using the traditional Serverless Framework. The deployed function does not include any event definitions as well as any kind of persistence (database). For more advanced configurations check out the [examples repo](https://github.com/serverless/examples/) which includes integrations with SQS, DynamoDB or examples of functions that are triggered in `cron`-like manner. For details about configuration of specific `events`, please refer to our [documentation](https://www.serverless.com/framework/docs/providers/aws/events/).
+This demonstrates how to deploy a NodeJS function running on AWS Lambda using the Serverless Framework. 
+The deployed function will accept a JSON payload as a POST request and send an alert to a Slack channel if the payload matches the desired criteria.
 
 ## Usage
 
-### Deployment
+### Setup Serverless and AWS account
 
-In order to deploy the example, you need to run the following command:
+1. Create an AWS account
+2. [Create an IAM user](https://www.serverless.com/framework/docs/providers/aws/guide/credentials/) for deploying with serverless
+3. Run `npm deploy` to push the code to Lambda
+4. In AWS, add API Gateway as a trigger for your Lambda function
+5. In your API Gateway, update the function route to POST
+6. [Enable IAM authorisation](https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-access-control-iam.html) for your API to control access
+7. Setup Slack (see below)
+8. Add your Slack webhook URL as an environment variable to your Lambda function
 
-```
-$ serverless deploy
-```
+### Set up Slack Integration
 
-After running deploy, you should see output similar to:
+Before we can send alerts to Slack, we need to set up an incoming webhook integration in Slack. To do this, follow the steps below:
 
-```bash
-Deploying aws-node-project to stage dev (us-east-1)
-
-✔ Service deployed to stack aws-node-project-dev (112s)
-
-functions:
-  hello: aws-node-project-dev-hello (1.5 kB)
-```
-
-### Invocation
-
-After successful deployment, you can invoke the deployed function by using the following command:
-
-```bash
-serverless invoke --function hello
-```
-
-Which should result in response similar to the following:
-
-```json
-{
-    "statusCode": 200,
-    "body": "{\n  \"message\": \"Go Serverless v3.0! Your function executed successfully!\",\n  \"input\": {}\n}"
-}
-```
+1. Go to https://api.slack.com/apps and create a new app.
+2. Under the "Features" tab, click on "Incoming Webhooks" and turn it on.
+3. Click on "Add New Webhook to Workspace" and select the channel you want to post alerts to.
+4. Copy the webhook URL.
 
 ### Local development
 
 You can invoke your function locally by using the following command:
 
 ```bash
-serverless invoke local --function hello
+npm start -- --data '{"Type":"SpamNotification","Email":"to@example.com","From":"from@example.com"}'
 ```
 
-Which should result in response similar to the following:
-
-```
-{
-    "statusCode": 200,
-    "body": "{\n  \"message\": \"Go Serverless v3.0! Your function executed successfully!\",\n  \"input\": \"\"\n}"
-}
-```

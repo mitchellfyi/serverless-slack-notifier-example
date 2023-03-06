@@ -1,3 +1,5 @@
+org: mitchellfyi
+app: serverless-slack-notifier-example
 service: serverless-slack-notifier-example
 frameworkVersion: '3'
 
