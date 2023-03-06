@@ -6,5 +6,5 @@ provider:
   runtime: nodejs18.x
 
 functions:
-  function1:
+  notify:
     handler: index.handler
