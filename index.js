@@ -1,39 +1,39 @@
 "use strict";
 
 const axios = require("axios");
+jest.mock("axios");
 
 const slackWebhookUrl = process.env.SLACK_WEBHOOK_URL;
 
 module.exports.handler = async (event) => {
   if (!slackWebhookUrl || !event?.body) return;
 
+  let report;
+
   try {
-    const requestBody = JSON.parse(event.body);
+    report = JSON.parse(event.body);
   } catch {
     return {
-      statusCode: 200,
-      body: JSON.stringify({ message: "Not valid JSON" }),
+      statusCode: 500,
+      body: JSON.stringify({ message: "Error parsing JSON payload" }),
     };
   }
 
-  if (requestBody.Type === "SpamNotification") {
-    const to = requestBody.Email;
-    const from = requestBody.From;
-    const message = `New spam notification for ${email}`;
-
-    await axios.post(slackWebhookUrl, {
-      text: message,
-    });
+  if (report.Type === "SpamNotification") {
+    const to = report.Email;
+    const from = report.From;
+    const message = `New spam notification for ${to} (from ${from}))`;
 
     try {
-      const response = await axios.post(slackWebhookUrl, { text: message });
+      await axios.post(slackWebhookUrl, { text: message });
+      
       return {
         statusCode: 200,
-        body: JSON.stringify({ message: "Alert sent to Slack" }),
+        body: JSON.stringify({ message: "Slack alert sent successfully" }),
       };
     } catch (error) {
       return {
-        statusCode: 200,
+        statusCode: 500,
         body: JSON.stringify({
           message: "There was a problem sending the message to Slack",
         }),

@@ -3,9 +3,7 @@
 This demonstrates how to deploy a NodeJS function running on AWS Lambda using the Serverless Framework. 
 The deployed function will accept a JSON payload as a POST request and send an alert to a Slack channel if the payload matches the desired criteria.
 
-## Usage
-
-### Setup Serverless and AWS account
+## Setup & Usage
 
 1. Create an AWS account
 2. [Create an IAM user](https://www.serverless.com/framework/docs/providers/aws/guide/credentials/) for deploying with serverless
@@ -27,9 +25,8 @@ Before we can send alerts to Slack, we need to set up an incoming webhook integr
 
 ### Local development
 
-You can invoke your function locally by using the following command:
+You can run the tests for this function locally:
 
 ```bash
-npm start -- --data '{"Type":"SpamNotification","Email":"to@example.com","From":"from@example.com"}'
+npm run test
 ```
-

@@ -1,9 +1,12 @@
 {
   "scripts": {
-    "start": "serverless invoke local --function notify",
+    "test": "jest",
     "deploy": "serverless deploy"
   },
   "dependencies": {
     "axios": "^1.3.4"
+  },
+  "devDependencies": {
+    "jest": "^29.5.0"
   }
 }
